@@ -3,17 +3,19 @@ package repository;
 import java.util.ArrayList;
 
 import connection.Connection;
+import facade.queryFacade;
 import model.Join;
 import model.Model;
 import model.Team;
 import model.User;
 
 public class TeamRepository implements Repository{
+	queryFacade facade = new queryFacade();
 
 	@Override
 	public void insert(String[] data, Connection conn) {
 		// TODO Auto-generated method stub
-		conn.writeCSV(data, "team");
+		facade.writeCSV(data, "team");
 	}
 
 	@Override
@@ -25,7 +27,7 @@ public class TeamRepository implements Repository{
 	@Override
 	public ArrayList<Model> find(String column, String[] filter, Boolean join, String table, Connection conn) {
 		if(!join) {
-			ArrayList<Model> listModel = conn.readCSV(table);
+			ArrayList<Model> listModel = facade.readCSV(table);
 			ArrayList<Model> newList = new ArrayList<Model>();
 			Team u;
 			if(filter!= null && filter[0].equals("=")) {
@@ -47,8 +49,8 @@ public class TeamRepository implements Repository{
 			ArrayList<Model> listTeam;
 			
 			if(table.equalsIgnoreCase("user")) {
-				listUser = conn.readCSV("user");
-				listTeam = conn.readCSV("team");
+				listUser = facade.readCSV("user");
+				listTeam = facade.readCSV("team");
 				for (Model m : listUser) {
 					User u = (User)m;
 					listJoin.add(new Join(u, new Team(u.getTeamName())));
@@ -87,8 +89,8 @@ public class TeamRepository implements Repository{
 				
 				
 			}else {
-				listUser = conn.readCSV("user");
-				listTeam = conn.readCSV("team");
+				listUser = facade.readCSV("user");
+				listTeam = facade.readCSV("team");
 				
 				for (Model m : listTeam) {
 					Team  t = (Team)m;
