@@ -15,11 +15,11 @@ public class Helper {
 		Connection conn = Connection.getInstance();
 		TeamRepository t = new TeamRepository();
 		String[] filter = {"=",teamName};
-		Team teamData = (Team) t.findOne("teamName",filter, null, null, conn);
+		Team teamData = (Team) t.findOne("teamName",filter, null, "team", conn);
 		
 		UserRepository u = new UserRepository();
 				
-		ArrayList<Model> users = u.find(null, null, null, null, conn);
+		ArrayList<Model> users = u.find(null, null, null, "user", conn);
 		int count = 0;
 		
 		for (Model user : users) {
@@ -28,7 +28,7 @@ public class Helper {
 			}
 		}
 
-		return count > max;
+		return count >= max;
 	}
 	
 	public static boolean checkYesNo(String input) {
