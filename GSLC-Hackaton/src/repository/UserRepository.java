@@ -21,8 +21,8 @@ public class UserRepository implements Repository{
 
 	@Override
 	public ArrayList<Model> find(String column, String[] filter, Boolean join, String table, Connection conn) {
-		// TODO Auto-generated method stub
-		return null;
+		return conn.readCSV(table);
+		
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import connection.Connection;
+import helper.Helper;
 import model.Model;
 import model.User;
 import repository.TeamRepository;
@@ -14,42 +15,16 @@ public class HackathonApp {
 
 	private static final int MAX_USERS_PER_TEAM = 3;
 	Scanner scanner = new Scanner(System.in);
-
-	public HackathonApp() {
-		while (true) {
-			displayMainMenu();
-		}
-		
-	}
-
-	public static void main(String[] args) {
-		new HackathonApp();
-	}
-
-	void displayMainMenu() {
+	
+	void displayMenu() {
 		System.out.println("1. Menu Utama");
 		System.out.println("2. Insert Data");
 		System.out.println("3. Show");
 		System.out.println("4. Exit");
-
-		int choice = scanner.nextInt();
-		scanner.nextLine();
-		switch (choice) {
-		case 1:
-			displayMainMenu();
-			break;
-		case 2:
-			displayInsertMenu();
-			break;
-		case 3:
-			displayShowMenu();
-			break;
-		case 4:
-			System.exit(0);
-		default:
-			System.out.println("Pilihan tidak valid. Silakan coba lagi.");
-		}
 	}
+
+	
+
 
 	void displayInsertMenu() {
 		System.out.println("Which table to insert? 1. User, 2. Team.");
@@ -78,26 +53,14 @@ public class HackathonApp {
 		System.out.println("Add team:");
 		String team = scanner.nextLine();
 
-		if (isTeamFull(team)) {
+		if (Helper.isTeamFull(team,MAX_USERS_PER_TEAM)) {
 			System.out.println("Error: Team full.");
 		} else {
 			addUserToTeam(name, nim, team);
 			System.out.println("User created!");
 		}
 	}
-
-	boolean isTeamFull(String teamName) {
-		ArrayList<String[]> teamData = new ArrayList<String[]>();
-		int count = 0;
-
-		for (String[] row : teamData) {
-			if (row[0].equals(teamName)) {
-				count++;
-			}
-		}
-
-		return count >= MAX_USERS_PER_TEAM;
-	}
+	
 
 	void addUserToTeam(String name, String nim, String team) {
 		String[] newUser = { name, nim, team };
@@ -144,8 +107,8 @@ public class HackathonApp {
 		Connection conn = Connection.getInstance();
 		if (choice == 1) {
 			UserRepository r = new UserRepository();
-			ArrayList<Model> users = r.find(null, null, null, null, conn);
-			
+			ArrayList<Model> users = r.find(null, null, null, "user", conn);
+			System.out.println("test");
 			for (Model m : users) {
 				System.out.println("Username : " + m.getName() + "\n"
 						+ "NIM      : " + ((User)m).getNim() + "\nTeam     : " + ((User)m).getTeamName() + "\n");
@@ -182,6 +145,39 @@ public class HackathonApp {
 			}
 		}
 	}
+	
+	void displayMainMenu() {
+		displayMenu();
+		int choice = scanner.nextInt();
+		scanner.nextLine();
+		switch (choice) {
+		case 1:
+//			displayMainMenu();
+			break;
+		case 2:
+			displayInsertMenu();
+			break;
+		case 3:
+			displayShowMenu();
+			break;
+		case 4:
+			System.exit(0);
+		default:
+			System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+		}
+	}
+	
+	public HackathonApp() {
+		while (true) {
+			displayMainMenu();
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		new HackathonApp();
+	}
+
 	
 	
 }
